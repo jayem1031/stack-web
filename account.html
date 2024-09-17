@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+    <link rel="stylesheet" href="account.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="top-container">
+        <a href="../Announcementad/announcementad.html"><img src="assets/st_1.png" alt="Logo" class="logo"></a>
+        <h1 class="app-name">South Tools Trading Services STacks</h1>
+        <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+    </div>
+    <aside class="sidebar" id="sidebar">
+        <a href="../Announcementad/announcementad.html"><i class="fas fa-bullhorn"></i> Announcement</a>
+        <a href="../chat/chatad.html"><i class="fas fa-comments"></i> Chat</a>
+        <a href="../transaction/transaction.html"><i class="fas fa-file-upload"></i> File Upload</a>
+        <a href="../profile/profilead.html"><i class="fas fa-user"></i> Profile</a>
+        <a href="../account/account.html"><i class="fas fa-users"></i> Accounts</a>
+        <a href="../attendance/attendance.html"><i class="fas fa-user-clock"></i> Attendance</a>
+        <a href="../Analytics/analytics.html"><i class="fas fa-chart-line"></i> Analytics</a>
+        <a href="../Login/login.html"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+    </aside>
+    <main class="content">
+        <h2 class="account-heading">Account Management</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- User rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+        
+    </main>
+    <script type="module">
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAj1nHx7jynYiSH34M-BsYKJbDyN_0tkEg",
+    authDomain: "stacks-517bd.firebaseapp.com",
+    databaseURL: "https://stacks-517bd-default-rtdb.firebaseio.com",
+    projectId: "stacks-517bd",
+    storageBucket: "stacks-517bd.appspot.com",
+    messagingSenderId: "717430442156",
+    appId: "1:717430442156:web:d5febb867d4d783c65b709",
+    measurementId: "G-8WJZWSPEWW"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+const analytics = getAnalytics(app);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userTableBody = document.getElementById('userTableBody');
+
+    // Fetch and display employees
+    const employeesRef = ref(database, 'Employee_Account');
+    onValue(employeesRef, (snapshot) => {
+        userTableBody.innerHTML = ''; // Clear previous data
+        snapshot.forEach((childSnapshot) => {
+            const user = childSnapshot.val();
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.displayName || 'No Name'}</td>
+                <td>${user.email || 'No Email'}</td>
+                <td>
+                    <button class="action-btn delete-btn" data-email="${user.email}"><i class="fas fa-user-times"></i> Delete</button>
+                    <button class="action-btn block-btn" data-email="${user.email}"><i class="fas fa-ban"></i> Reset</button>
+                    <button class="action-btn freeze-btn" data-email="${user.email}"><i class="fas fa-pause"></i> Disable</button>
+                </td>
+            `;
+            userTableBody.appendChild(row);
+        });
+    });
+
+    // Handle actions
+    userTableBody.addEventListener('click', async (e) => {
+        const button = e.target.closest('button');
+        if (!button) return; // Ensure that the target is a button
+
+        const userEmail = button.getAttribute('data-email');
+
+        if (button.classList.contains('delete-btn')) {
+            try {
+                const response = await fetch('http://localhost:3000/deleteUser', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: userEmail })
+                });
+                if (response.ok) {
+                    alert(`User ${userEmail} deleted successfully.`);
+                    button.closest('tr').remove();
+                } else {
+                    console.error('Error deleting user.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        if (button.classList.contains('block-btn')) {
+            try {
+                await sendPasswordResetEmail(auth, userEmail);
+                alert(`Password reset email sent to ${userEmail}.`);
+            } catch (error) {
+                console.error("Error sending password reset email:", error);
+            }
+        }
+
+        if (button.classList.contains('freeze-btn')) {
+            try {
+                const response = await fetch('http://localhost:3000/disableUser', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: userEmail })
+                });
+                if (response.ok) {
+                    alert(`User ${userEmail} has been disabled.`);
+                } else {
+                    console.error('Error disabling user.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                console.log(serviceAccount); // Ensure the service account is correctly loaded
+            }
+        }
+    });
+});
+
+// Sidebar toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const content = document.querySelector('.content');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        content.classList.toggle('with-sidebar');
+    });
+});
+
+    </script>
+</body>
+</html>

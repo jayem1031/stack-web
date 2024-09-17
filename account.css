@@ -1,0 +1,224 @@
+/* Updated CSS */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    background-image: url("background28.png");
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    background-image: url('../account/assets/background28.png');
+}
+
+.table-container {
+    margin-top: 20px; /* Adjust this value if necessary */
+}
+
+h2.account-heading {
+    color: #ffffff; /* Change to your desired color */
+    font-size: 28px; /* Adjust font size as needed */
+    margin-bottom: 20px; /* Add space below the heading */
+    text-align: center; /* Center align the heading text */
+}
+
+.top-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 80px;
+}
+
+.app-name {
+    flex: 1;
+    text-align: center;
+    font-family: 'Ethnocentric', sans-serif;
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+    background-image: linear-gradient(45deg, #4134ff, #0800ff, #ff0000, #3967ff, #ff4343); /* Gradient colors */
+    background-size: 600% 600%; /* Size of the gradient for animation */
+    -webkit-background-clip: text; /* Apply gradient to text */
+    background-clip: text;
+    color: transparent; /* Hide original text color */
+    animation: gradientAnimation 5s ease infinite, waveAnimation 3s ease-in-out infinite;
+}
+
+/* Keyframe for gradient animation */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.menu-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.3s ease;
+    /* Absolute positioning to place the button in the top-right corner */
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    margin-top: 20px;
+    margin-right: 30px;
+}
+
+.menu-btn:hover {
+    transform: rotate(90deg);
+}
+
+.menu-button:active {
+    transform: rotate(90deg); /* Rotate the button on click */
+}
+
+.sidebar {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 150px;
+    transform: translateX(-100%); /* Hidden off-screen by default */
+    opacity: 0; /* Hidden */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transitions */
+    flex-direction: column;
+    margin-top: 44px;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Slide in */
+    opacity: 1; /* Visible */
+}
+
+.sidebar ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+.sidebar li {
+    margin-bottom: 10px; /* Space between items */
+}
+
+.sidebar a {
+    display: block; /* Make links block-level elements for easier styling */
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+.content {
+    margin-left: 160px; /* Adjust based on sidebar width */
+    padding: 20px;
+    margin-top: 80px; /* Adjust based on top-container height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px); /* Adjust based on top-container height */
+}
+
+.table-container {
+    width: 1000px; /* Set the desired width */
+    height: 580px; /* Set the desired height */
+    overflow-y: auto; /* Allows vertical scrolling if content exceeds height */
+    overflow-x: auto; /* Allows horizontal scrolling if content exceeds width */
+    margin-top: 20px; /* Optional: Add space above the table */
+}
+
+table {
+    width: 100%; /* Table takes full width of the container */
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0; /* Keeps the header row fixed at the top of the table when scrolling */
+    z-index: 1; /* Ensures header stays above other content */
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+td {
+    background-color: #fff;
+}
+button.action-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.block-btn {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.block-btn:hover {
+    background-color: #e0a800;
+}
+
+.freeze-btn {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.freeze-btn:hover {
+    background-color: #138496;
+}
